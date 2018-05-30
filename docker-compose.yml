@@ -17,8 +17,8 @@ services:
       - MONGO_URI=mongodb://mongo:27017/growi
       - ELASTICSEARCH_URI=http://elasticsearch:9200/growi
       - PASSWORD_SEED=changeme
-      # - FILE_UPLOAD=local    # activate this line if you use local storage of server rather than AWS
-      # - MATHJAX=1            # activate this line if you want to use MathJax
+      - FILE_UPLOAD=gcs    # activate this line if you use local storage of server rather than AWS
+      - MATHJAX=1            # activate this line if you want to use MathJax
       # - PLANTUML_URI=http:// # activate this line and specify if you use your own PlantUML server rather than public plantuml.com
     command: "dockerize
               -wait tcp://mongo:27017
@@ -26,13 +26,13 @@ services:
               -timeout 60s
               npm run server:prod"
     volumes:
-      - growi_data:/data
+      - ./growi_data:/data
 
   mongo:
     image: mongo:3.4
     volumes:
       - mongo_configdb:/data/configdb
-      - mongo_db:/data/db
+      - ./mongo_db:/data/db
 
   elasticsearch:
     image: elasticsearch:5.3-alpine
@@ -50,8 +50,6 @@ services:
       - ./esconfig:/usr/share/elasticsearch/config
 
 volumes:
-  growi_data:
   mongo_configdb:
-  mongo_db:
   es_data:
   es_plugins:
